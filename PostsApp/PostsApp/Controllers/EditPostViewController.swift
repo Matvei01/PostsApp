@@ -18,6 +18,9 @@ final class EditPostViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         postTextView.text = post?.title
+        if let imagePath = post?.imagePath {
+            loadPostImage(from: imagePath)
+        }
     }
     
     override func save() {
@@ -26,13 +29,27 @@ final class EditPostViewController: BaseViewController {
             return
         }
         
-        guard let post = post else {
-            showAlert(title: "Error", message: "Task not found")
+        guard let image = postImageView.image else {
+            showAlert(title: "Error", message: "No image selected")
             return
         }
         
-        storageManager.update(post, newName: postName)
-        delegate?.reloadData()
-        navigationController?.popToRootViewController(animated: true)
+        let imageName = UUID().uuidString
+        if let imageURL = saveImage(image, withName: imageName) {
+            guard let post = post else { return }
+            storageManager.update(post, newName: postName, imageURL: imageURL)
+            delegate?.reloadData()
+            navigationController?.popToRootViewController(animated: true)
+        } else {
+            showAlert(title: "Error", message: "Could not save image")
+        }
+    }
+    
+    private func loadPostImage(from path: String) {
+        if let image = UIImage(contentsOfFile: path) {
+            postImageView.image = image
+        } else {
+            postImageView.image = UIImage(systemName: "photo")
+        }
     }
 }

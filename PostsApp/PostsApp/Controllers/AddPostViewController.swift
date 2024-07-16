@@ -8,7 +8,7 @@
 import UIKit
 
 final class AddPostViewController: BaseViewController {
-
+    
     override func setupNavigationBar() {
         title = "Adding new post"
         super.setupNavigationBar()
@@ -19,8 +19,19 @@ final class AddPostViewController: BaseViewController {
             showAlert(title: "Error", message: "Fill in all the fields")
             return
         }
-        storageManager.create(postName)
-        delegate?.reloadData()
-        navigationController?.popToRootViewController(animated: true)
+        
+        guard let image = postImageView.image else {
+            showAlert(title: "Error", message: "No image selected")
+            return
+        }
+        
+        let imageName = UUID().uuidString
+        if let imageURL = saveImage(image, withName: imageName) {
+            storageManager.create(postName, imageURL: imageURL)
+            delegate?.reloadData()
+            navigationController?.popToRootViewController(animated: true)
+        } else {
+            showAlert(title: "Error", message: "Could not save image")
+        }
     }
 }

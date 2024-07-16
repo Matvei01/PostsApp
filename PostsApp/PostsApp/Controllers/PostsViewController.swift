@@ -74,6 +74,24 @@ extension PostsViewController {
         } else {
             content.secondaryText = "No date"
         }
+        
+        if let imagePath = post.imagePath {
+            print("Attempting to load image from path: \(imagePath)")
+            let fileManager = FileManager.default
+            guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+                print("Failed to get documents directory URL")
+                return cell
+            }
+            let imageURL = documentsURL.appendingPathComponent(imagePath)
+            if let image = UIImage(contentsOfFile: imageURL.path) {
+                content.image = image
+            } else {
+                print("Failed to load image from path: \(imageURL.path)")
+                content.image = UIImage(systemName: "photo")
+            }
+        } else {
+            content.image = UIImage(systemName: "photo")
+        }
         cell.contentConfiguration = content
         return cell
     }
@@ -124,6 +142,8 @@ private extension PostsViewController {
             forCellReuseIdentifier: reuseIdentifier
         )
         
+        tableView.rowHeight = 120
+        
         fetchData()
         
         setupNavigationBar()
@@ -162,11 +182,18 @@ private extension PostsViewController {
             switch result {
             case .success(let posts):
                 self.posts = posts
+                for post in posts {
+                    if let imagePath = post.imagePath {
+                        print("Fetched image path: \(imagePath)")
+                    }
+                }
+                self.tableView.reloadData()
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
     }
+    
     
     func filterContentForSearchText(_ searchText: String) {
         filteredPosts = posts.filter { (post: Post) -> Bool in

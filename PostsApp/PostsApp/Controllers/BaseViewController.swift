@@ -177,6 +177,28 @@ class BaseViewController: UIViewController {
     @objc func postImageTapped() {
         present(imagePicker, animated: true)
     }
+    
+    func saveImage(_ image: UIImage, withName name: String) -> URL? {
+        guard let data = image.jpegData(compressionQuality: 1) else {
+            print("Failed to get JPEG representation of UIImage")
+            return nil
+        }
+        let fileManager = FileManager.default
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("Failed to get documents directory URL")
+            return nil
+        }
+        let imageURL = documentsURL.appendingPathComponent("\(name).jpg")
+        
+        do {
+            try data.write(to: imageURL)
+            print("Successfully saved image at path: \(imageURL.path)")
+            return imageURL
+        } catch {
+            print("Error saving image: \(error)")
+            return nil
+        }
+    }
 }
 
 // MARK: - Alert Controller
