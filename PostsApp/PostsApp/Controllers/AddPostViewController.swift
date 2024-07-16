@@ -7,10 +7,20 @@
 
 import UIKit
 
-final class AddPostViewController: UIViewController {
+final class AddPostViewController: BaseViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
+    override func setupNavigationBar() {
+        title = "Adding new post"
+        super.setupNavigationBar()
+    }
+    
+    override func save() {
+        guard let postName = postTextView.text, !postName.isEmpty else {
+            showAlert(title: "Error", message: "Fill in all the fields")
+            return
+        }
+        storageManager.create(postName)
+        delegate?.reloadData()
+        navigationController?.popToRootViewController(animated: true)
     }
 }

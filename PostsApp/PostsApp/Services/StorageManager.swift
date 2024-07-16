@@ -28,6 +28,39 @@ final class StorageManager {
         viewContext = persistentContainer.viewContext
     }
     
+    // MARK: - CRUD
+    func create(_ postName: String) {
+        let post = Post(context: viewContext)
+        post.title = postName
+        post.date = Date()
+        saveContext()
+    }
+    
+    func update(_ post: Post, newName: String) {
+        post.title = newName
+        post.date = Date()
+        saveContext()
+    }
+    
+    func delete(_ post: Post) {
+        viewContext.delete(post)
+        saveContext()
+    }
+    
+    func fetchData(completion: (Result<[Post], Error>) -> Void) {
+        let fetchRequest = Post.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            let posts = try viewContext.fetch(fetchRequest)
+            completion(.success(posts))
+        } catch let error {
+            completion(.failure(error))
+            print(error.localizedDescription)
+        }
+    }
+    
     // MARK: - Core Data Saving support
     func saveContext () {
         let context = persistentContainer.viewContext
