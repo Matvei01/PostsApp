@@ -29,16 +29,20 @@ final class StorageManager {
     }
     
     // MARK: - CRUD
-    func create(_ postName: String) {
+    func create(_ postName: String, imageURL: URL) {
         let post = Post(context: viewContext)
         post.title = postName
         post.date = Date()
+        post.imagePath = imageURL.lastPathComponent
+        print("Saving image path: \(imageURL.lastPathComponent)")
         saveContext()
     }
     
-    func update(_ post: Post, newName: String) {
+    func update(_ post: Post, newName: String, imageURL: URL) {
         post.title = newName
         post.date = Date()
+        post.imagePath = imageURL.lastPathComponent
+        print("Updating image path: \(imageURL.lastPathComponent)")
         saveContext()
     }
     
