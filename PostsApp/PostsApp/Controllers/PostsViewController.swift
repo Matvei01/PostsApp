@@ -7,6 +7,7 @@
 
 import UIKit
 
+// MARK: - PostViewControllerDelegate
 protocol PostViewControllerDelegate: AnyObject {
     func reloadData()
 }
@@ -18,9 +19,17 @@ final class PostsViewController: UITableViewController {
     private var filteredPosts: [Post] = []
     private let reuseIdentifier = "CellId"
     private let storageManager = StorageManager.shared
+    private let fileManager = FileManager.default
     private let searchController = UISearchController(
         searchResultsController: nil
     )
+    
+    private let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter
+    }()
     
     private var isFiltering: Bool {
         return searchController.isActive && !searchBarIsEmpty
@@ -66,29 +75,26 @@ extension PostsViewController {
         let post = isFiltering ? filteredPosts[indexPath.row] : posts[indexPath.row]
         var content = cell.defaultContentConfiguration()
         content.text = post.title
+        
         if let date = post.date {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .medium
-            formatter.timeStyle = .short
-            content.secondaryText = formatter.string(from: date)
+            let dateString = formatter.string(from: date)
+            let secondaryTextAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.systemGray]
+            let attributedString = NSAttributedString(string: dateString, attributes: secondaryTextAttributes)
+            content.secondaryAttributedText = attributedString
         } else {
             content.secondaryText = "No date"
         }
         
         if let imagePath = post.imagePath {
             print("Attempting to load image from path: \(imagePath)")
-            let fileManager = FileManager.default
-            guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-                print("Failed to get documents directory URL")
-                return cell
-            }
-            let imageURL = documentsURL.appendingPathComponent(imagePath)
-            if let image = UIImage(contentsOfFile: imageURL.path) {
+            if let imageURL = fileManager.documentsDirectoryURL()?.appendingPathComponent(imagePath),
+               let image = UIImage(contentsOfFile: imageURL.path) {
                 content.image = image
             } else {
-                print("Failed to load image from path: \(imageURL.path)")
+                print("Failed to load image from path: \(imagePath)")
                 content.image = UIImage(systemName: "photo")
             }
+            content.imageProperties.cornerRadius = 15
         } else {
             content.image = UIImage(systemName: "photo")
         }
@@ -170,7 +176,7 @@ private extension PostsViewController {
     func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Tasks"
+        searchController.searchBar.placeholder = "Search Posts"
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }
@@ -193,7 +199,6 @@ private extension PostsViewController {
             }
         }
     }
-    
     
     func filterContentForSearchText(_ searchText: String) {
         filteredPosts = posts.filter { (post: Post) -> Bool in

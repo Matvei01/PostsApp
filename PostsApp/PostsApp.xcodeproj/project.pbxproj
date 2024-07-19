@@ -17,6 +17,7 @@
 		1AA52D782C46A1A0006F4969 /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA52D772C46A1A0006F4969 /* AddPostViewController.swift */; };
 		1AA52D7A2C46A1F5006F4969 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA52D792C46A1F5006F4969 /* BaseViewController.swift */; };
 		1AA52D7C2C46A25F006F4969 /* PostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA52D7B2C46A25F006F4969 /* PostsViewController.swift */; };
+		1AA52DA02C4A81FC006F4969 /* Extension+FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA52D9F2C4A81FC006F4969 /* Extension+FileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		1AA52D772C46A1A0006F4969 /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		1AA52D792C46A1F5006F4969 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		1AA52D7B2C46A25F006F4969 /* PostsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewController.swift; sourceTree = "<group>"; };
+		1AA52D9F2C4A81FC006F4969 /* Extension+FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+FileManager.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 		1AA52D562C469D13006F4969 /* PostsApp */ = {
 			isa = PBXGroup;
 			children = (
+				1AA52D9E2C4A81C7006F4969 /* Extensions */,
 				1AA52D6E2C469DBF006F4969 /* Controllers */,
 				1AA52D742C469E80006F4969 /* Services */,
 				1AA52D712C469DF3006F4969 /* LaunchScreen */,
@@ -117,6 +120,14 @@
 				1AA52D722C469E6F006F4969 /* StorageManager.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		1AA52D9E2C4A81C7006F4969 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				1AA52D9F2C4A81FC006F4969 /* Extension+FileManager.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,6 +200,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AA52DA02C4A81FC006F4969 /* Extension+FileManager.swift in Sources */,
 				1AA52D582C469D13006F4969 /* AppDelegate.swift in Sources */,
 				1AA52D732C469E6F006F4969 /* StorageManager.swift in Sources */,
 				1AA52D7C2C46A25F006F4969 /* PostsViewController.swift in Sources */,

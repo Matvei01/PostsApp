@@ -10,10 +10,10 @@ import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
     private var storageManager = StorageManager.shared
-
+    
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         return true
     }
-
+    
     func applicationWillTerminate(_ application: UIApplication) {
         storageManager.saveContext()
     }
