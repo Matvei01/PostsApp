@@ -9,9 +9,14 @@ import UIKit
 
 class BaseViewController: UIViewController {
     
+    // MARK: - Delegate
     weak var delegate: PostViewControllerDelegate?
     
+    // MARK: - Public Properties
     let storageManager = StorageManager.shared
+    
+    // MARK: - Private Properties
+    private let fileManager = FileManager.default
     
     // MARK: - UI Elements
     private lazy var backBarButtonItem: UIBarButtonItem = {
@@ -55,7 +60,7 @@ class BaseViewController: UIViewController {
         )
     }()
     
-    private lazy var imagePicker: UIImagePickerController = {
+    lazy var imagePicker: UIImagePickerController = {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
@@ -79,7 +84,6 @@ class BaseViewController: UIViewController {
         imageView.layer.cornerRadius = 15
         imageView.addGestureRecognizer(tapGestureRecognizer)
         imageView.isUserInteractionEnabled = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 180).isActive = true
         return imageView
@@ -183,8 +187,7 @@ class BaseViewController: UIViewController {
             print("Failed to get JPEG representation of UIImage")
             return nil
         }
-        let fileManager = FileManager.default
-        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        guard let documentsURL = fileManager.documentsDirectoryURL() else {
             print("Failed to get documents directory URL")
             return nil
         }

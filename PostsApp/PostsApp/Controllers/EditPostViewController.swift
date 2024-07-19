@@ -8,7 +8,12 @@
 import UIKit
 
 final class EditPostViewController: BaseViewController {
+    
+    // MARK: - Public Properties
     var post: Post?
+    
+    // MARK: - Private Properties
+    private let fileManager = FileManager.default
     
     override func setupNavigationBar() {
         title = "Editing post"
@@ -45,10 +50,16 @@ final class EditPostViewController: BaseViewController {
         }
     }
     
-    private func loadPostImage(from path: String) {
-        if let image = UIImage(contentsOfFile: path) {
+    private func loadPostImage(from imagePath: String) {
+        guard let documentsURL = fileManager.documentsDirectoryURL() else {
+            print("Failed to get documents directory URL")
+            return
+        }
+        let imageURL = documentsURL.appendingPathComponent(imagePath)
+        if let image = UIImage(contentsOfFile: imageURL.path) {
             postImageView.image = image
         } else {
+            print("Failed to load image from path: \(imageURL.path)")
             postImageView.image = UIImage(systemName: "photo")
         }
     }
